@@ -1,5 +1,7 @@
 import { MaskingRule, MaskingStrategy } from './types';
 import { maskString } from './masks/common';
+import { maskEmail } from './masks/email';
+import { maskPhoneNumber } from './masks/phone';
 import { generateDeterministicToken } from './masks/tokenizer';
 
 // Simple function to apply a mask based on strategy
@@ -13,6 +15,14 @@ function applyRule(value: any, rule: MaskingRule): any {
 
   switch (rule.strategy) {
     case 'partial':
+      // Check if the value looks like an email
+      if (value.includes('@')) {
+        return maskEmail(value, maskChar);
+      }
+      // Check if this is a phone number field (by checking if rule keys include 'phone')
+      if (rule.keys.some(key => key.toLowerCase().includes('phone'))) {
+        return maskPhoneNumber(value, maskChar, showLast);
+      }
       return maskString(value, maskChar, showLast);
     case 'full':
       return maskChar.repeat(value.length);

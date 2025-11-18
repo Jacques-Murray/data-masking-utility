@@ -11,7 +11,7 @@ describe('Masking Utilities (Unit Tests)', () => {
     });
 
     it('should handle custom mask characters', () => {
-      expect(maskString('SensitiveData', '#', 3)).toBe('###########ata');
+      expect(maskString('SensitiveData', '#', 3)).toBe('##########ata');
     });
 
     it('should return the original string if length is less than or equal to showLast', () => {

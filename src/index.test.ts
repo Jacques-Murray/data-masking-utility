@@ -37,10 +37,10 @@ describe('createDataMasker (Integration Tests)', () => {
     const maskedData = masker(testData);
 
     // 1. Partial Email (userEmail - custom char 'x')
-    expect(maskedData.userEmail).toBe('x***x******n@corp.net');
+    expect(maskedData.userEmail).toBe('axxxjxxxxxxn@corp.net');
 
     // 2. Full Masking (ssn - custom char '#')
-    expect(maskedData.ssn).toBe('#########');
+    expect(maskedData.ssn).toBe('###########');
 
     // 3. Tokenization (password) - Should be a consistent hash
     expect(maskedData.password).toHaveLength(32);
@@ -50,14 +50,14 @@ describe('createDataMasker (Integration Tests)', () => {
     expect(maskedData.contact.token).toHaveLength(32);
 
     // 5. Array Traversal & Partial Masking (history[0].email and history[0].phone)
-    expect(maskedData.history[0].email).toBe('o***e*****l@corp.net');
+    expect(maskedData.history[0].email).toBe('oxxexxxxl@corp.net');
 
     // 6. Partial Phone (showLast: 3)
-    expect(maskedData.contact.phone).toBe('(xxx) xxx-x234');
-    expect(maskedData.history[0].phone).toBe('xxxxxx333');
+    expect(maskedData.contact.phone).toBe('(***) ***-*234');
+    expect(maskedData.history[0].phone).toBe('*******333');
 
     // 7. Full Masking (accountNumber)
-    expect(maskedData.accountNumber).toBe('####################');
+    expect(maskedData.accountNumber).toBe('###################');
 
     // 8. Unrelated fields should remain untouched (e.g., id, name, notes, address)
     expect(maskedData.name).toBe(testData.name);

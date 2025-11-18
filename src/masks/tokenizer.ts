@@ -8,7 +8,7 @@ import * as crypto from 'crypto';
  */
 export function generateDeterministicToken(value: string): string {
   // Use SHA-256 for a strong, fixed-length hash
-  return crypto.createHash('sha256').update(value, 'utf8').digest('hex').substring(0, 16);
+  return crypto.createHash('sha256').update(value, 'utf8').digest('hex').substring(0, 32);
 }
 
 /**

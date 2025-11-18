@@ -8,9 +8,9 @@ export function maskString(
     return value;
   }
 
+  const visiblePart = value.slice(-showLast);
   const maskLength = value.length - showLast;
   const maskedPart = maskChar.repeat(maskLength);
-  const visiblePart = value.slice(-showLast);
 
   return maskedPart + visiblePart;
 }
