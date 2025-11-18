@@ -7,6 +7,6 @@ export interface MaskingRule {
   showLast?: number; // Number of characters to show from the end (default: 4)
 }
 
-export interface MaskingConfig {
+export interface MaskingOptions {
   rules: MaskingRule[];
 }
