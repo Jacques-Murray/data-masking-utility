@@ -1,5 +1,6 @@
 import { MaskingRule, MaskingStrategy } from './types';
 import { maskString } from './masks/common';
+import { generateDeterministicToken } from './masks/tokenizer';
 
 // Simple function to apply a mask based on strategy
 function applyRule(value: any, rule: MaskingRule): any {
@@ -16,8 +17,7 @@ function applyRule(value: any, rule: MaskingRule): any {
     case 'full':
       return maskChar.repeat(value.length);
     case 'token':
-      // In a real utility, this would use a token generator
-      return 'REDACTED_TOKEN';
+      return generateDeterministicToken(value);
     default:
       return value;
   }
