@@ -1,0 +1,9 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "module": "nodenext", // Use NodeNext for proper ESM handling
+    "outDir": "./dist",
+    "declaration": false, // Avoid duplicate declaration files
+    "filename": "index.mjs"
+  }
+}
