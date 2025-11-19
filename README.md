@@ -1,85 +1,102 @@
-# Data Masking Utility
+# data-masking-utility
 
-A TypeScript utility for masking sensitive data like email addresses, phone numbers, and credit cards.
+A high-performance, zero-dependency utility for masking sensitive data (PII) in strings and JSON objects.
 
 ## Installation
 
 ```bash
 npm install data-masking-utility
+# or
+yarn add data-masking-utility
 ```
 
 ## Usage
 
-### CommonJS
+The utility works by defining a set of **Masking Rules** and the applying those rules to your data.
 
-```javascript
-const { maskEmail, maskPhone, maskCreditCard } = require('data-masking-utility');
+**1. Define Rules**
 
-console.log(maskEmail('john.doe@example.com'));        // j******e@example.com
-console.log(maskPhone('1234567890'));                  // ******7890
-console.log(maskCreditCard('1234 5678 9012 3456'));   // ************3456
+Define which keys in your objects should be masked and with what strategy.
+
+```TypeScript
+import { createDataMasker, MaskingStrategy, MaskingOptions } from 'data-masking-utility';
+
+const maskingOptions: MaskingOptions = {
+  rules: [
+    {
+      // Specific masking for standard fields
+      keys: ['email', 'userEmail'],
+      strategy: 'partial',
+    },
+    {
+      // Full masking for sensitive IDs
+      keys: ['ssn', 'userId'],
+      strategy: 'full',
+      maskChar: '#',
+    },
+    {
+      // Phone number masking with custom visibility
+      keys: ['phone'],
+      strategy: 'partial',
+      showLast: 3,
+    },
+    {
+      // Tokenization (replacement) for data that needs to be completely removed
+      keys: ['password'],
+      strategy: 'token',
+    },
+  ],
+};
+
+const masker = createDataMasker(maskingOptions);
 ```
 
-### ES Modules
+**2. Apply Masker**
 
-```javascript
-import { maskEmail, maskPhone, maskCreditCard } from 'data-masking-utility';
+Use the `masker` function on any object or array of objects. The utility handles **nested**
+structures automatically.
 
-console.log(maskEmail('john.doe@example.com'));        // j******e@example.com
-console.log(maskPhone('1234567890'));                  // ******7890
-console.log(maskCreditCard('1234 5678 9012 3456'));   // ************3456
+```TypeScript
+const sensitiveData = {
+  id: '811-123',
+  name: 'Jane Doe',
+  userEmail: 'jane.doe@example.com',
+  ssn: '123-45-6789',
+  contact: {
+    phone: '(555) 123-9876',
+    address: '123 Main St',
+  },
+};
+
+const maskedData = masker(sensitiveData);
+
+console.log(maskedData);
+
+/*
+Output:
+{
+  id: '###-###',
+  name: 'Jane Doe',
+  userEmail: 'j***.d***@example.com',
+  ssn: '###-##-####',
+  contact: {
+    phone: '(***) ***-9876', // Last 4 digits shown
+    address: '123 Main St.',
+  },
+}
+*/
 ```
 
-## API
+## API Reference
 
-### `maskEmail(email: string): string`
+`createDataMasker(options: MaskingOptions): (data: any) => any`
 
-Masks an email address by replacing characters in the username with asterisks, keeping the first and last characters visible.
+The main factory function. It takes configuration options and returns as bound masking function.
 
-### `maskPhone(phone: string): string`
+## Types
 
-Masks a phone number by replacing all but the last 4 digits with asterisks.
-
-### `maskCreditCard(cardNumber: string): string`
-
-Masks a credit card number by showing only the last 4 digits.
-
-## Development
-
-### Build
-
-```bash
-npm run build
-```
-
-This will generate both CommonJS and ESM builds:
-- CommonJS: `dist/index.js`
-- ESM: `dist/esm/index.js`
-- TypeScript declarations: `dist/index.d.ts`
-
-### Test
-
-```bash
-npm test
-```
-
-## TypeScript Configuration
-
-This package supports dual module formats (CommonJS and ESM) using separate TypeScript configurations:
-
-- `tsconfig.json` - Base configuration for CommonJS build
-- `tsconfig.esm.json` - ESM-specific configuration that extends the base config
-
-### Fixed Issues
-
-The ESM build previously failed with these errors:
-
-1. **TS5069**: `declarationDir` cannot be specified without `declaration` or `composite`
-   - **Fix**: Removed redundant `declarationDir` from base config and set `declaration: false` in ESM config
-
-2. **TS5023**: Unknown compiler option `filename`
-   - **Fix**: Removed invalid `filename` option from ESM config
-
-## License
-
-MIT
+| Interface | Description |
+|-----------|-------------|
+| `MaskingOptions` | The root configuration object containing the `rules` array. |
+| `MaskingRule` | Defines how a field should be masked. |
+| `MaskingStrategy` | Union type: `'partial'`, `'full'`, `'token'`. |

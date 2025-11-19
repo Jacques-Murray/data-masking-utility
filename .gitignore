@@ -1,4 +1,10 @@
-node_modules/
-dist/
-*.log
+# Dependencies
+/node_modules
+
+# Build Output
+/dist
+
+# Editor/OS Files
 .DS_Store
+*.log
+npm-debug.log*

@@ -1,25 +1,44 @@
 {
   "name": "data-masking-utility",
   "version": "1.0.0",
-  "description": "A utility for masking sensitive data",
+  "description": "A high-performance, zero-dependency utility for masking sensitive data (PII) in strings and objects.",
   "main": "dist/index.js",
-  "module": "dist/esm/index.js",
+  "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
   "scripts": {
-    "build": "npm run build:cjs && npm run build:esm",
-    "build:cjs": "tsc",
-    "build:esm": "tsc -p tsconfig.esm.json",
-    "clean": "rm -rf dist",
-    "test": "npm run build && node test/test.js"
+    "build": "rm -rf dist && tsc -p tsconfig.json && tsc -p tsconfig.esm.json",
+    "prepublishOnly": "npm run build",
+    "test": "jest"
   },
   "keywords": [
+    "masking",
     "data-masking",
+    "pii",
     "privacy",
-    "security"
+    "security",
+    "utility"
   ],
-  "author": "Jacques Murray",
+  "author": {
+    "name": "Jacques Murray",
+    "email": "jacquesmmurray@gmail.com",
+    "url": "https://github.com/Jacques-Murray"
+  },
   "license": "MIT",
+  "files": [
+    "dist"
+  ],
+  "exports": {
+    ".": {
+      "require": "./dist/index.js",
+      "import": "./dist/index.mjs",
+      "types": "./dist/index.d.ts"
+    }
+  },
   "devDependencies": {
-    "typescript": "^5.0.0"
+    "@types/jest": "^30.0.0",
+    "@types/node": "^24.10.1",
+    "jest": "^30.2.0",
+    "ts-jest": "^29.4.5",
+    "typescript": "^5.9.3"
   }
 }
