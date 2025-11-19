@@ -1,0 +1,24 @@
+{
+  "name": "data-masking-utility",
+  "version": "1.0.0",
+  "description": "A utility for masking sensitive data",
+  "main": "dist/index.js",
+  "module": "dist/esm/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "npm run build:cjs && npm run build:esm",
+    "build:cjs": "tsc",
+    "build:esm": "tsc -p tsconfig.esm.json",
+    "clean": "rm -rf dist"
+  },
+  "keywords": [
+    "data-masking",
+    "privacy",
+    "security"
+  ],
+  "author": "Jacques Murray",
+  "license": "MIT",
+  "devDependencies": {
+    "typescript": "^5.0.0"
+  }
+}
