@@ -4,7 +4,6 @@
     "module": "esnext",
     "outDir": "./dist/esm",
     "declaration": false,
-    "declarationDir": "./dist/esm",
-    "filename": "./dist/index.mjs"
+    "declarationMap": false
   }
 }
